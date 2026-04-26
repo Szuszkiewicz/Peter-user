@@ -1,0 +1,21 @@
+server:
+  port: 8489
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/dtc_comment?serverTimezone=GMT&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: yck72352
+
+# mybatis信息配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml,classpath:dao/*.xml
+  type-aliases-package: com.Peter.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    root: info
+  file:
+    name: peter-user.log
