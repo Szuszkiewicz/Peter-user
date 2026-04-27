@@ -19,3 +19,5 @@ logging:
     root: info
   file:
     name: peter-user.log
+
+ip: localhost

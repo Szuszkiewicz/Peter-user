@@ -43,7 +43,9 @@ public class User implements Serializable {
     /**
      * 0:正常，1：已删除
      */
-    private Byte isDelete;
+    private Integer isDelete;
+
+    private String avatar;
 
     private static final long serialVersionUID = 1L;
 
@@ -127,12 +129,20 @@ public class User implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public Byte getIsDelete() {
+    public Integer getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete(Byte isDelete) {
+    public void setIsDelete(Integer isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     @Override
@@ -157,7 +167,8 @@ public class User implements Serializable {
             && (this.getDateOfBirth() == null ? other.getDateOfBirth() == null : this.getDateOfBirth().equals(other.getDateOfBirth()))
             && (this.getRole() == null ? other.getRole() == null : this.getRole().equals(other.getRole()))
             && (this.getUpdatedAt() == null ? other.getUpdatedAt() == null : this.getUpdatedAt().equals(other.getUpdatedAt()))
-            && (this.getIsDelete() == null ? other.getIsDelete() == null : this.getIsDelete().equals(other.getIsDelete()));
+            && (this.getIsDelete() == null ? other.getIsDelete() == null : this.getIsDelete().equals(other.getIsDelete()))
+            && (this.getAvatar() == null ? other.getAvatar() == null : this.getAvatar().equals(other.getAvatar()));
     }
 
     @Override
@@ -175,6 +186,7 @@ public class User implements Serializable {
         result = prime * result + ((getRole() == null) ? 0 : getRole().hashCode());
         result = prime * result + ((getUpdatedAt() == null) ? 0 : getUpdatedAt().hashCode());
         result = prime * result + ((getIsDelete() == null) ? 0 : getIsDelete().hashCode());
+        result = prime * result + ((getAvatar() == null) ? 0 : getAvatar().hashCode());
         return result;
     }
 
@@ -195,6 +207,7 @@ public class User implements Serializable {
         sb.append(", role=").append(role);
         sb.append(", updatedAt=").append(updatedAt);
         sb.append(", isDelete=").append(isDelete);
+        sb.append(", avatar=").append(avatar);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
