@@ -30,7 +30,7 @@ public class UserParam {
      * 用户状态
      * 1:正常，2：冻结,3:注销
      */
-    private  Integer status;
+    private  Byte status;
     /**
      * 用户生日
      */

@@ -124,9 +124,8 @@ public class UserServiceImpl implements UserService {
                 log.error("删除用户-deleteUser-异常：", e);
                 return -1;
             }
-
-
     }
+
 
     private User buildUser(UpdateUserInfoDto updateUserInfoDto) {
         User user =new User();
@@ -143,6 +142,9 @@ public class UserServiceImpl implements UserService {
         }
         if(updateUserInfoDto.getDateOfBirth()!= null){
             user.setDateOfBirth(updateUserInfoDto.getDateOfBirth());
+        }
+        if(updateUserInfoDto.getStatus()!= null){
+            user.setStatus(updateUserInfoDto.getStatus());
         }
         return user;
     }

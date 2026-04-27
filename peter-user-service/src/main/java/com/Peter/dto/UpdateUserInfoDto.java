@@ -30,4 +30,9 @@ public class UpdateUserInfoDto {
      * 生日
      */
     private Date dateOfBirth;
+    /**
+     * 1:正常，2：冻结,3:注销
+     */
+    private Byte status;
+
 }

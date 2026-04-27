@@ -73,6 +73,18 @@ public class UserController {
         //步骤三：返回值
         return BaseResultUtils.generateSuccess(count>0);
     }
+    @PostMapping("/update/user/status")
+    public BaseResult<Boolean> updateUserStatus(@RequestBody UserParam userParam){
+        //步骤一：参数校验
+        Assert.isTrue(userParam != null, "入参对象不能为空");
+        Assert.isTrue(userParam.getStatus()!=null, "用户状态不能为空");
+        Assert.isTrue(userParam.getUsername()!=null, "用户名不能为空");
+        Assert.isTrue(userParam.getId()!=null, "用户ID不能为空");
+        //步骤二：修改用户状态
+        UpdateUserInfoDto updateUserInfoDto = buildUpdateUserInfoDto(userParam);
+        int count =userService.updateUserInfo(updateUserInfoDto);
+        return BaseResultUtils.generateSuccess(count>0);
+    }
 
     private static @NonNull UpdateUserInfoDto buildUpdateUserInfoDto(UserParam userParam) {
         UpdateUserInfoDto updateUserInfoDto = new UpdateUserInfoDto();
