@@ -14,4 +14,10 @@ public interface UserService {
 
     int deleteUser(UpdateUserInfoDto updateUserInfoDto);
 
+    boolean isUsernameExists(String username);
+
+    boolean isPhoneExists(String phone);
+
+    boolean isEmailExists(String email);
+
 }

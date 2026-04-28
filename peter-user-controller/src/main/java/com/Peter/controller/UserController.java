@@ -109,10 +109,15 @@ public class UserController {
     private void checkRegisterUserParam(UserParam userParam) {
         Assert.isTrue(userParam!=null,"入参对象不能为空");
         Assert.isTrue(StringUtils.isNotBlank(userParam.getUsername()),"用户名不能为空");
-        Assert.isTrue(StringUtils.isNotBlank(userParam.getPassword()),"密码不能为空");
+        //Assert.isTrue(StringUtils.isNotBlank(userParam.getPassword()),"密码不能为空");
         Assert.isTrue(StringUtils.isNotBlank(userParam.getEmail()),"邮箱不能为空");
         Assert.isTrue(StringUtils.isNotBlank(userParam.getPhone()),"手机号不能为空");
         Assert.isTrue(Validator.isEmail(userParam.getEmail()),"邮箱格式不正确");
         Assert.isTrue(Validator.isMobile(userParam.getPhone()),"手机号格式不正确");
+        Assert.isTrue(!userService.isUsernameExists(userParam.getUsername()), "用户名已存在");
+        Assert.isTrue(!userService.isPhoneExists(userParam.getPhone()), "手机号已被注册");
+        Assert.isTrue(!userService.isEmailExists(userParam.getEmail()), "邮箱已被注册");
     }
+
 }
+

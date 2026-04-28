@@ -35,4 +35,9 @@ public class UserParam {
      * 用户生日
      */
     private Date dateOfBirth;
+    /**
+     * 角色
+     * @see com.Peter.RolesEnums
+     */
+    private Byte role;
 }

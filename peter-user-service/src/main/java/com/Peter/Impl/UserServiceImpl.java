@@ -1,6 +1,5 @@
 package com.Peter.Impl;
 
-import cn.hutool.crypto.digest.DigestUtil;
 import com.Peter.Constants;
 import com.Peter.RolesEnums;
 import com.Peter.UserService;
@@ -20,7 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.DigestUtils;
 
 import java.util.List;
 
@@ -54,12 +52,10 @@ public class UserServiceImpl implements UserService {
 
     private void filledDefaultData(User user, RegisterUserDto registerUserDto) {
         //默认角色
-        if(user.getRole()== null){
-            user.setRole((byte)RolesEnums.USER.getCode());
-        }
+            user.setRole(registerUserDto.getRole()==null?(byte)RolesEnums.USER.getCode(): registerUserDto.getRole());
         //默认密码
         if(StringUtils.isBlank(user.getPassword())){
-            user.setPassword(Constants.USER_DEFAULT_PASSWORD);
+            user.setPassword(PasswordUtils.passwordWithMd5(Constants.USER_DEFAULT_PASSWORD));
         }else{
             user.setPassword(PasswordUtils.passwordWithMd5(user.getPassword()));
         }
@@ -179,6 +175,45 @@ public class UserServiceImpl implements UserService {
             user.setStatus(updateUserInfoDto.getStatus());
         }
         return user;
+    }
+
+    @Override
+    public boolean isUsernameExists(String username) //检查字段username
+    {
+        if (StringUtils.isBlank(username)) {
+            return false;
+        }
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();// Criteria 查询sql条件
+        criteria.andUsernameEqualTo(username);
+        criteria.andIsDeleteEqualTo(0);
+        List<User> users = userDao.selectByExample(userExample);
+        return !CollectionUtils.isEmpty(users);
+    }
+
+    @Override
+    public boolean isPhoneExists(String phone) {
+        if (StringUtils.isBlank(phone)) {
+            return false;
+        }
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andPhoneEqualTo(phone);
+        criteria.andIsDeleteEqualTo(0);
+        List<User> users = userDao.selectByExample(userExample);
+        return !CollectionUtils.isEmpty(users);
+    }
+    @Override
+    public boolean isEmailExists(String email) {
+        if (StringUtils.isBlank(email)) {
+            return false;
+        }
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andEmailEqualTo(email);
+        criteria.andIsDeleteEqualTo(0);
+        List<User> users = userDao.selectByExample(userExample);
+        return !CollectionUtils.isEmpty(users);
     }
 
 

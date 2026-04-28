@@ -27,4 +27,8 @@ public class RegisterUserDto {
      * 用户生日
      */
     private Date dateOfBirth;
+    /**
+     * 角色
+     */
+    private Byte role;
 }
