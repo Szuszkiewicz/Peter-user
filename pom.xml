@@ -2,25 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.6</version>
-        <relativePath/>
+        <groupId>com.Peter</groupId>
+        <artifactId>peter-project</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../peter-project</relativePath>
     </parent>
-    <groupId>com.Peter</groupId>
     <artifactId>peter-user</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>peter-user</name>
     <description>peter-user</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
+
     <modules>
         <module>peter-user-api</module>
         <module>peter-user-controller</module>
@@ -28,16 +21,12 @@
         <module>peter-user-orm</module>
         <module>peter-user-main</module>
     </modules>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
+
     <properties>
         <java.version>21</java.version>
         <apache.commons.version>3.14.0</apache.commons.version>
     </properties>
+
 
     <dependencies>
         <dependency>
