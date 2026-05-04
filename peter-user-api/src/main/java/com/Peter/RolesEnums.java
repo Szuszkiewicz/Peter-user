@@ -6,14 +6,25 @@ public enum RolesEnums {
     ;
     int code;
     String Message;
-    RolesEnums(int code,String Message){
-        this.code=code;
-        this.Message=Message;
+
+    RolesEnums(int code, String Message) {
+        this.code = code;
+        this.Message = Message;
     }
-    public int getCode() {
-        return code;
+
+    public static RolesEnums getByCode(int code) {
+        for (RolesEnums value : RolesEnums.values()) {
+            if (value.getCode() == code) {
+                return value;
+            }
+        }
+        return null;
     }
-    public String getMessage() {
-        return Message;
+        public int getCode () {
+            return code;
+        }
+        public String getMessage () {
+            return Message;
+        }
     }
-}
+

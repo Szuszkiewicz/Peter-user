@@ -4,13 +4,17 @@ import com.Peter.Constants;
 import com.Peter.RolesEnums;
 import com.Peter.UserService;
 import com.Peter.dao.UserDao;
+import com.Peter.dto.QueryUserInfoDto;
 import com.Peter.dto.RegisterUserDto;
 import com.Peter.dto.UpdateUserInfoDto;
 import com.Peter.dto.UserInfoDto;
 import com.Peter.entity.User;
 import com.Peter.entity.UserExample;
 import com.Peter.utils.PasswordUtils;
+import com.Peter.utils.TokenUtils;
 import com.alibaba.fastjson2.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -20,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -87,6 +92,10 @@ public class UserServiceImpl implements UserService {
                 UserInfoDto userInfoDto = new UserInfoDto();
                 BeanUtils.copyProperties(userfromDb, userInfoDto);
                 log.info("用户登录成功：{}", username);
+                //生成 token
+                String tokenData=userInfoDto.getId()+"-"+RolesEnums.getByCode(userInfoDto.getRole().intValue());
+                String token= TokenUtils.createToken(tokenData,password);
+                userInfoDto.setToken(token);
                 return userInfoDto;
             }
             return null;
@@ -152,6 +161,62 @@ public class UserServiceImpl implements UserService {
                 log.error("删除用户-deleteUser-异常：", e);
                 return -1;
             }
+    }
+    @Override
+    public List<UserInfoDto> queryUserInfoByParam(QueryUserInfoDto queryUserInfoDto) {
+        try {
+            log.info("查询用户信息-deleteUser-入参：{}", JSON.toJSONString(queryUserInfoDto));
+
+            UserExample userExample=getUserExample(queryUserInfoDto);
+
+            List<User> users=userDao.selectByExample(userExample);
+
+            List<UserInfoDto> userInfoDtos=buildUserInfoDtoList(users);
+            log.info("查询用户信息-deleteUser-出参：{}", JSON.toJSONString(queryUserInfoDto));
+            return userInfoDtos;
+        }catch(Exception e){
+            log.error("查询用户信息-deleteUser-异常：", e);
+            return new ArrayList<>();
+        }
+    }
+    @Override
+    public PageInfo<User> queryUserListByPage(QueryUserInfoDto queryUserInfoDto, Integer pageNum, Integer pageSize){
+        //可以直接查用户信息
+        PageHelper.startPage(pageNum,pageSize);
+        UserExample userExample=getUserExample(queryUserInfoDto, true);
+        //额外生成一条MySQL语句
+        List<User> users=userDao.selectByExample(userExample);
+        return PageInfo.of(users);
+
+    }
+
+
+
+    private List<UserInfoDto> buildUserInfoDtoList(List<User> users) {
+        if(CollectionUtils.isEmpty(users)){
+            return new ArrayList<>();
+        }
+        List<UserInfoDto> userInfoDtos=new ArrayList<>();
+        for(int i=0;i<users.size();i++){
+            User user=users.get(i);
+            UserInfoDto userInfoDto=new UserInfoDto();
+            BeanUtils.copyProperties(user, userInfoDto);
+            userInfoDtos.add(userInfoDto);
+        }
+        return userInfoDtos;
+    }
+
+    private UserExample getUserExample(QueryUserInfoDto queryUserInfoDto) {
+        return getUserExample(queryUserInfoDto,false);
+    }
+    private UserExample getUserExample(QueryUserInfoDto queryUserInfoDto,boolean noLimit) {
+        UserExample userExample=new UserExample();
+        UserExample.Criteria criteria=userExample.createCriteria();
+        if(!noLimit){
+            userExample.setLimit(1000);
+        }
+        criteria.andIdEqualTo(queryUserInfoDto.getId());
+        return  userExample;
     }
 
 

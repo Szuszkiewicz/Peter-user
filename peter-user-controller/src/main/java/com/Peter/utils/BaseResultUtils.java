@@ -31,7 +31,7 @@ public class BaseResultUtils {
         baseResult.setData( null);
         return baseResult;
     }
-    public static BaseResult success(){
+    public static BaseResult success(String s){
         BaseResult baseResult = new BaseResult<>();
         baseResult.setCode(0);
         baseResult.setSuccess(true);

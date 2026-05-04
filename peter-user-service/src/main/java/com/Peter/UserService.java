@@ -1,8 +1,14 @@
 package com.Peter;
 
+import com.Peter.dto.QueryUserInfoDto;
 import com.Peter.dto.RegisterUserDto;
 import com.Peter.dto.UpdateUserInfoDto;
 import com.Peter.dto.UserInfoDto;
+import com.Peter.entity.User;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -20,4 +26,7 @@ public interface UserService {
 
     boolean isEmailExists(String email);
 
+    List<UserInfoDto> queryUserInfoByParam(QueryUserInfoDto queryUserInfoDto);
+
+    PageInfo<User> queryUserListByPage(QueryUserInfoDto queryUserInfoDto, Integer pageNum, Integer pageSize);
 }
