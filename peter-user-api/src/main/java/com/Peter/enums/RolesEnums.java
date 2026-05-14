@@ -1,4 +1,4 @@
-package com.Peter;
+package com.Peter.enums;
 
 public enum RolesEnums {
     USER(1, "普通用户"),

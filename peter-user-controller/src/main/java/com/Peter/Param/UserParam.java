@@ -1,5 +1,6 @@
 package com.Peter.Param;
 
+import com.Peter.enums.RolesEnums;
 import lombok.Data;
 
 import java.util.Date;
@@ -37,7 +38,7 @@ public class UserParam {
     private Date dateOfBirth;
     /**
      * 角色
-     * @see com.Peter.RolesEnums
+     * @see RolesEnums
      */
     private Byte role;
 }

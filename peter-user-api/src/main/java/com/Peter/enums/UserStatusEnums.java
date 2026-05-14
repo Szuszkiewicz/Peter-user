@@ -1,6 +1,4 @@
-package com.Peter;
-
-import lombok.Getter;
+package com.Peter.enums;
 
 public enum UserStatusEnums {
     NORMAL(1, "正常"),

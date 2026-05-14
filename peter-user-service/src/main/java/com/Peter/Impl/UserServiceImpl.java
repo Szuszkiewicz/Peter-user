@@ -1,7 +1,7 @@
 package com.Peter.Impl;
 
 import com.Peter.Constants;
-import com.Peter.RolesEnums;
+import com.Peter.enums.RolesEnums;
 import com.Peter.UserService;
 import com.Peter.dao.UserDao;
 import com.Peter.dto.QueryUserInfoDto;
