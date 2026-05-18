@@ -85,7 +85,7 @@ public class UserController {
         }
         return BaseResultUtils.generateSuccess(userInfoDtos.get(0));
     }
-    @GetMapping("/query/user/info")
+    @GetMapping("/query/user/list")
     public PageResultWrapper<UserInfoDto> queryUserList(UserParam userParam,
                                                         @RequestParam("PageNum") Integer pageNum,
                                                         @RequestParam("PageSize") Integer pageSize){

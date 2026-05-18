@@ -2,12 +2,35 @@ server:
   port: 8489
 
 spring:
+  application:
+    name: peter-user
+  config:
+    import: nacos:peter-user.yaml?group=DEFAULT_GROUP
   datasource:
-    url: jdbc:mysql://localhost:3306/dtc_comment?serverTimezone=GMT&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://47.104.144.251:3306/peter_user?serverTimezone=GMT&useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: yck72352
+    password: Yck72352@
+    hikari:
+      maximum-pool-size: 60
+      connection-timeout: 60000
+      idle-timeout: 60000
+      max-lifetime: 60000
+      minimum-idle: 10
+      validation-timeout: 3000
+      login-timeout: 5
   profiles:
     active: dev
+  cloud:
+    nacos:
+      config:
+        server-addr: 47.104.144.251:8848
+        username: nacos
+        password: nacos
+        # prefix, file-extension, group 等配置都移到了 import 语句中，这里不再需要
+      discovery:
+        server-addr: 47.104.144.251:8848
+        username: nacos
+        password: nacos
 # mybatis信息配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml,classpath:dao/*.xml
@@ -22,3 +45,7 @@ logging:
     name: peter-user.log
 
 ip: localhost
+
+peter:
+  test:
+    hh: peter
