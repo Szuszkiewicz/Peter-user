@@ -1,7 +1,5 @@
 package com.Peter.controller;
 
-import cn.hutool.core.lang.Validator;
-import cn.hutool.db.PageResult;
 import com.Peter.Param.BaseResult;
 import com.Peter.Param.PageResultWrapper;
 import com.Peter.Param.UserParam;
@@ -15,7 +13,6 @@ import com.Peter.utils.BaseResultUtils;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.util.PerformanceSensitive;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

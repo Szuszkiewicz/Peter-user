@@ -1,13 +1,13 @@
 package com.Peter.Impl;
 
 import com.Peter.Constants;
+import com.Peter.dto.UserInfoDto;
 import com.Peter.enums.RolesEnums;
 import com.Peter.UserService;
 import com.Peter.dao.UserDao;
 import com.Peter.dto.QueryUserInfoDto;
 import com.Peter.dto.RegisterUserDto;
 import com.Peter.dto.UpdateUserInfoDto;
-import com.Peter.dto.UserInfoDto;
 import com.Peter.entity.User;
 import com.Peter.entity.UserExample;
 import com.Peter.utils.PasswordUtils;

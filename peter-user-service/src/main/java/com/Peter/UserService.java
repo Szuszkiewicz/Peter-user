@@ -5,7 +5,6 @@ import com.Peter.dto.RegisterUserDto;
 import com.Peter.dto.UpdateUserInfoDto;
 import com.Peter.dto.UserInfoDto;
 import com.Peter.entity.User;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
