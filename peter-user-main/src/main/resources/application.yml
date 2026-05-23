@@ -7,9 +7,11 @@ spring:
   config:
     import: nacos:peter-user.yaml?group=DEFAULT_GROUP
   datasource:
-    url: jdbc:mysql://47.104.144.251:3306/peter_user?serverTimezone=GMT&useSSL=false&allowPublicKeyRetrieval=true
+#    url: jdbc:mysql://47.104.144.251:3306/dtc_comment?serverTimezone=GMT&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/dtc_comment?serverTimezone=GMT&useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: Yck72352@
+#    password: Yck72352@
+    password: yck72352
     hikari:
       maximum-pool-size: 60
       connection-timeout: 60000
