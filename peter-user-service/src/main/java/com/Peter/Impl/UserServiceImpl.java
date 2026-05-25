@@ -1,6 +1,6 @@
 package com.Peter.Impl;
 
-import com.Peter.Constants;
+import com.Peter.common.Constants;
 import com.Peter.dto.UserInfoDto;
 import com.Peter.enums.RolesEnums;
 import com.Peter.UserService;
