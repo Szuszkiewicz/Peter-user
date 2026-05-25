@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
                 //生成 token
                 String tokenData=userInfoDto.getId()+"-"+RolesEnums.getByCode(userInfoDto.getRole().intValue());
                 String token= TokenUtils.createToken(tokenData,password);
-                userInfoDto.setToken(token);
+                userInfoDto.setToken(token);//token作为前端后续请求后端的入参
                 return userInfoDto;
             }
             return null;

@@ -14,7 +14,7 @@ import java.util.List;
 public interface UserFeignService {
 
     @GetMapping("/user/query/user/info")
-    public BaseResult<UserInfoDto> queryUserInfo(@RequestParam("id") String id);
+    public BaseResult<UserInfoDto> queryUserInfoById(@RequestParam("id") String id);
 
 
 }
