@@ -14,6 +14,7 @@
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
     <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
     <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="is_agree_contract" jdbcType="BIT" property="isAgreeContract" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -75,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, username, `password`, email, created_at, phone, `status`, date_of_birth, `role`, 
-    updated_at, is_delete, avatar
+    updated_at, is_delete, avatar, is_agree_contract
   </sql>
   <select id="selectByExample" parameterType="com.Peter.entity.UserExample" resultMap="BaseResultMap">
     select
@@ -119,11 +120,13 @@
     insert into user (username, `password`, email, 
       created_at, phone, `status`, 
       date_of_birth, `role`, updated_at, 
-      is_delete, avatar)
+      is_delete, avatar, is_agree_contract
+      )
     values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{createdAt,jdbcType=TIMESTAMP}, #{phone,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
       #{dateOfBirth,jdbcType=DATE}, #{role,jdbcType=TINYINT}, #{updatedAt,jdbcType=TIMESTAMP}, 
-      #{isDelete,jdbcType=INTEGER}, #{avatar,jdbcType=VARCHAR})
+      #{isDelete,jdbcType=INTEGER}, #{avatar,jdbcType=VARCHAR}, #{isAgreeContract,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.Peter.entity.User" useGeneratedKeys="true">
     insert into user
@@ -161,6 +164,9 @@
       <if test="avatar != null">
         avatar,
       </if>
+      <if test="isAgreeContract != null">
+        is_agree_contract,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="username != null">
@@ -195,6 +201,9 @@
       </if>
       <if test="avatar != null">
         #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="isAgreeContract != null">
+        #{isAgreeContract,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -243,6 +252,9 @@
       <if test="record.avatar != null">
         avatar = #{record.avatar,jdbcType=VARCHAR},
       </if>
+      <if test="record.isAgreeContract != null">
+        is_agree_contract = #{record.isAgreeContract,jdbcType=BIT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -261,7 +273,8 @@
       `role` = #{record.role,jdbcType=TINYINT},
       updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
       is_delete = #{record.isDelete,jdbcType=INTEGER},
-      avatar = #{record.avatar,jdbcType=VARCHAR}
+      avatar = #{record.avatar,jdbcType=VARCHAR},
+      is_agree_contract = #{record.isAgreeContract,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -302,6 +315,9 @@
       <if test="avatar != null">
         avatar = #{avatar,jdbcType=VARCHAR},
       </if>
+      <if test="isAgreeContract != null">
+        is_agree_contract = #{isAgreeContract,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -317,7 +333,8 @@
       `role` = #{role,jdbcType=TINYINT},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=INTEGER},
-      avatar = #{avatar,jdbcType=VARCHAR}
+      avatar = #{avatar,jdbcType=VARCHAR},
+      is_agree_contract = #{isAgreeContract,jdbcType=BIT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

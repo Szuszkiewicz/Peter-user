@@ -31,4 +31,8 @@ public class RegisterUserDto {
      * 角色
      */
     private Byte role;
+    /**
+     * 是否勾选了已同意 服务协议
+     */
+    private Boolean isAgreeContract;
 }

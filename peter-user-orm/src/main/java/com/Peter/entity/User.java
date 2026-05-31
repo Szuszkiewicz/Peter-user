@@ -47,6 +47,8 @@ public class User implements Serializable {
 
     private String avatar;
 
+    private Boolean isAgreeContract;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -145,6 +147,14 @@ public class User implements Serializable {
         this.avatar = avatar;
     }
 
+    public Boolean getIsAgreeContract() {
+        return isAgreeContract;
+    }
+
+    public void setIsAgreeContract(Boolean isAgreeContract) {
+        this.isAgreeContract = isAgreeContract;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -168,7 +178,8 @@ public class User implements Serializable {
             && (this.getRole() == null ? other.getRole() == null : this.getRole().equals(other.getRole()))
             && (this.getUpdatedAt() == null ? other.getUpdatedAt() == null : this.getUpdatedAt().equals(other.getUpdatedAt()))
             && (this.getIsDelete() == null ? other.getIsDelete() == null : this.getIsDelete().equals(other.getIsDelete()))
-            && (this.getAvatar() == null ? other.getAvatar() == null : this.getAvatar().equals(other.getAvatar()));
+            && (this.getAvatar() == null ? other.getAvatar() == null : this.getAvatar().equals(other.getAvatar()))
+            && (this.getIsAgreeContract() == null ? other.getIsAgreeContract() == null : this.getIsAgreeContract().equals(other.getIsAgreeContract()));
     }
 
     @Override
@@ -187,6 +198,7 @@ public class User implements Serializable {
         result = prime * result + ((getUpdatedAt() == null) ? 0 : getUpdatedAt().hashCode());
         result = prime * result + ((getIsDelete() == null) ? 0 : getIsDelete().hashCode());
         result = prime * result + ((getAvatar() == null) ? 0 : getAvatar().hashCode());
+        result = prime * result + ((getIsAgreeContract() == null) ? 0 : getIsAgreeContract().hashCode());
         return result;
     }
 
@@ -208,6 +220,7 @@ public class User implements Serializable {
         sb.append(", updatedAt=").append(updatedAt);
         sb.append(", isDelete=").append(isDelete);
         sb.append(", avatar=").append(avatar);
+        sb.append(", isAgreeContract=").append(isAgreeContract);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

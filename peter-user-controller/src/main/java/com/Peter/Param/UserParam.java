@@ -41,4 +41,8 @@ public class UserParam {
      * @see RolesEnums
      */
     private Byte role;
+    /**
+     * 是否已经同意用户协议
+     */
+    private Boolean isAgreeContract;
 }

@@ -4,10 +4,8 @@ import com.Peter.Param.BaseResult;
 import com.Peter.Param.PageResultWrapper;
 import com.Peter.Param.UserParam;
 import com.Peter.UserService;
-import com.Peter.dto.QueryUserInfoDto;
-import com.Peter.dto.RegisterUserDto;
-import com.Peter.dto.UpdateUserInfoDto;
-import com.Peter.dto.UserInfoDto;
+import com.Peter.common.ContractConfig;
+import com.Peter.dto.*;
 import com.Peter.entity.User;
 import com.Peter.utils.BaseResultUtils;
 import com.github.pagehelper.PageInfo;
@@ -39,6 +37,8 @@ public class UserController {
      * 6.密码加密
      * @return
      */
+    @Autowired
+    private ContractConfig contractConfig;
     @PostMapping("/register")
     public BaseResult<Boolean> registerUser(@RequestBody UserParam userParam){
         log.info("注册用户-controller-入参：{}", userParam);
@@ -53,6 +53,22 @@ public class UserController {
             return BaseResultUtils.generateSuccess(count>0);
         }else {
             return BaseResultUtils.generateError("注册失败");
+        }
+    }
+    @GetMapping("/contract")
+    public BaseResult<ContractInfoDto> getContract(){
+        log.info("查询服务协议-controller");
+        try {
+            ContractInfoDto contractInfoDto = ContractInfoDto.builder()
+                    .title(contractConfig.getTitle())
+                    .version(contractConfig.getVersion())
+                    .updateTime(contractConfig.getUpdateTime())
+                    .content(contractConfig.getContent())
+                    .build();
+            return BaseResultUtils.generateSuccess(contractInfoDto);
+        }catch (Exception e){
+            log.error("查询服务协议失败",e);
+            return BaseResultUtils.generateError("查询服务协议失败");
         }
     }
     @PostMapping("/login")
@@ -180,6 +196,7 @@ public class UserController {
     private void checkRegisterUserParam(UserParam userParam) {
         Assert.isTrue(userParam!=null,"入参对象不能为空");
         Assert.isTrue(StringUtils.isNotBlank(userParam.getUsername()),"用户名不能为空");
+        Assert.isTrue(userParam.getIsAgreeContract(),"请同意用户协议");
         //Assert.isTrue(StringUtils.isNotBlank(userParam.getPassword()),"密码不能为空");
 //        Assert.isTrue(StringUtils.isNotBlank(userParam.getEmail()),"邮箱不能为空");
 //        Assert.isTrue(StringUtils.isNotBlank(userParam.getPhone()),"手机号不能为空");

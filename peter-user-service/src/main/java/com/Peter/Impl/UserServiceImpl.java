@@ -40,7 +40,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public int register(RegisterUserDto registerUserDto) {
         try {
+
             log.info("注册用户-register-入参：{}", JSON.toJSONString(registerUserDto));
+            if(!registerUserDto.getIsAgreeContract()){
+                log.warn("注册失败，请先同意用户协议");
+                return -1;
+            }
             User user = new User();
             BeanUtils.copyProperties(registerUserDto, user);//entity转dto
            //填充默认数据

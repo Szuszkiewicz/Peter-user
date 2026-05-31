@@ -921,6 +921,66 @@ public class UserExample {
             addCriterion("avatar not between", value1, value2, "avatar");
             return (Criteria) this;
         }
+
+        public Criteria andIsAgreeContractIsNull() {
+            addCriterion("is_agree_contract is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeContractIsNotNull() {
+            addCriterion("is_agree_contract is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeContractEqualTo(Boolean value) {
+            addCriterion("is_agree_contract =", value, "isAgreeContract");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeContractNotEqualTo(Boolean value) {
+            addCriterion("is_agree_contract <>", value, "isAgreeContract");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeContractGreaterThan(Boolean value) {
+            addCriterion("is_agree_contract >", value, "isAgreeContract");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeContractGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_agree_contract >=", value, "isAgreeContract");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeContractLessThan(Boolean value) {
+            addCriterion("is_agree_contract <", value, "isAgreeContract");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeContractLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_agree_contract <=", value, "isAgreeContract");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeContractIn(List<Boolean> values) {
+            addCriterion("is_agree_contract in", values, "isAgreeContract");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeContractNotIn(List<Boolean> values) {
+            addCriterion("is_agree_contract not in", values, "isAgreeContract");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeContractBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_agree_contract between", value1, value2, "isAgreeContract");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeContractNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_agree_contract not between", value1, value2, "isAgreeContract");
+            return (Criteria) this;
+        }
     }
 
     /**
