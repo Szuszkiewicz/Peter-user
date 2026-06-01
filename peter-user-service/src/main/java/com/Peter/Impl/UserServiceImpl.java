@@ -1,13 +1,13 @@
 package com.Peter.Impl;
 
+import cn.hutool.core.lang.Validator;
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.extra.mail.JakartaMail;
 import com.Peter.common.Constants;
-import com.Peter.dto.UserInfoDto;
+import com.Peter.dto.*;
 import com.Peter.enums.RolesEnums;
 import com.Peter.UserService;
 import com.Peter.dao.UserDao;
-import com.Peter.dto.QueryUserInfoDto;
-import com.Peter.dto.RegisterUserDto;
-import com.Peter.dto.UpdateUserInfoDto;
 import com.Peter.entity.User;
 import com.Peter.entity.UserExample;
 import com.Peter.utils.PasswordUtils;
@@ -20,12 +20,19 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -36,6 +43,12 @@ public class UserServiceImpl implements UserService {
     private String ip;
     @Value("${server.port:8489}")
     private String port;
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private JavaMailSender javaMailSender;
+    @Value("${spring.mail.username}")
+    private String fromEmail;
 
     @Override
     public int register(RegisterUserDto registerUserDto) {
@@ -134,6 +147,83 @@ public class UserServiceImpl implements UserService {
             return count;
         }catch (Exception e){
             log.error("修改用户信息-updateUserInfo-异常",e);
+            return -1;
+        }
+    }
+    @Override
+    public boolean sendVerificationCode(String email){
+        try{
+
+            log.info("发送验证码-sendVerificationCode-入参：{}",email);
+            Assert.isTrue(StringUtils.isNotBlank(email),"邮箱不能为空");
+            Assert.isTrue(Validator.isEmail(email),"邮箱格式不正确");
+            if(!isEmailExists( email)){
+                log.warn("邮箱不存在：{}",email);
+                return false;
+            }
+            //生成6位验证码
+            String verificationCode= String.format("%06d", new Random().nextInt(new Random().nextInt(100,291),new Random().nextInt(305,999756)));
+            //储存到redis
+            String redisKey="Verification_Code:"+ email;
+            redisTemplate.opsForValue().set(redisKey,verificationCode,5, TimeUnit.MINUTES);
+            //发送邮件
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setFrom(fromEmail);
+            simpleMailMessage.setTo(email);
+            simpleMailMessage.setSubject("输入此临时验证码以重置密码");
+            simpleMailMessage.setText("您的验证码为："+verificationCode+"\n\n验证码5分钟内有效，请勿泄露给其他人,如果并非您本人尝试修改密码，请忽略此电子邮件");
+
+            javaMailSender.send(simpleMailMessage);
+            log.info("发送验证码-sendVerificationCode-出参：{}",true);
+            return true;
+        }catch (Exception e){
+            log.error("发送验证码-sendVerificationCode-异常",e);
+            return false;
+        }
+    }
+    @Override
+    public int updateUserPassword(ResetPasswordDto resetPasswordDto){
+        try{
+            log.info("重置密码-updateUserPassword-入参：{}",JSON.toJSONString(resetPasswordDto));
+            Assert.isTrue(resetPasswordDto!=null,"入参不能为空");
+            Assert.isTrue(StringUtils.isNotBlank(resetPasswordDto.getEmail()),"邮箱不能为空");
+            Assert.isTrue(Validator.isEmail(resetPasswordDto.getEmail()),"邮箱格式不正确");
+            Assert.isTrue(isEmailExists(resetPasswordDto.getEmail()),"邮箱不存在");
+            Assert.isTrue(StringUtils.isNotBlank(resetPasswordDto.getVerificationCode()),"验证码不能为空");
+            Assert.isTrue(StringUtils.isNotBlank(resetPasswordDto.getNewPassword()),"新密码不能为空");
+            Assert.isTrue(StringUtils.isNotBlank(resetPasswordDto.getConfirmPassword()),"确认密码不能为空");
+            Assert.isTrue(Objects.equals(resetPasswordDto.getConfirmPassword(), resetPasswordDto.getNewPassword()),"两次输入的密码不一致");
+            //从redis获取验证码校验
+            String redisKey="Verification_Code:"+ resetPasswordDto.getEmail();
+            String storedCode=redisTemplate.opsForValue().get(redisKey);
+            if(!StringUtils.isNotBlank(storedCode)){
+                log.warn("验证码已过期：{}",resetPasswordDto.getEmail());
+                return -1;
+            }
+            if(!storedCode.equals(resetPasswordDto.getVerificationCode())){
+                log.warn("验证码错误：{}",resetPasswordDto.getEmail());
+                return -1;
+            }
+            //查询用户
+            UserExample userExample = new UserExample();
+            UserExample.Criteria criteria = userExample.createCriteria();
+            criteria.andEmailEqualTo(resetPasswordDto.getEmail());
+            criteria.andIsDeleteEqualTo(0);
+            List<User> users = userDao.selectByExample(userExample);
+            if(CollectionUtils.isEmpty(users)){
+                log.warn("用户不存在：{}",resetPasswordDto.getEmail());
+                return -1;
+            }
+            User user=users.get(0);
+            //更新密码
+            user.setPassword(PasswordUtils.passwordWithMd5(resetPasswordDto.getNewPassword()));
+            //删除验证码
+            redisTemplate.delete(redisKey);
+            int count=userDao.updateByPrimaryKeySelective(user);
+            log.info("重置密码-updateUserPassword-出参：{}",count);
+            return count;
+        }catch (Exception e){
+            log.error("重置密码-updateUserPassword-异常",e);
             return -1;
         }
     }

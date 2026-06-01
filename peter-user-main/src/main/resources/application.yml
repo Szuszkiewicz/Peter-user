@@ -22,6 +22,31 @@ spring:
       login-timeout: 5
   profiles:
     active: dev
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: your-email@qq.com
+    password: your-authorization-code
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      database: 0
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1ms
+          max-idle: 8
+          min-idle: 0
   cloud:
     nacos:
       config:
@@ -51,8 +76,6 @@ ip: localhost
 peter:
   test:
     hh: peter
-
-
 
 contract:
   title: "用户服务协议"
@@ -98,3 +121,4 @@ contract:
     8.2 如本协议任何条款被认定为无效，不影响其他条款的效力。
     
     更新日期：2026年5月31日
+

@@ -1,9 +1,6 @@
 package com.Peter;
 
-import com.Peter.dto.QueryUserInfoDto;
-import com.Peter.dto.RegisterUserDto;
-import com.Peter.dto.UpdateUserInfoDto;
-import com.Peter.dto.UserInfoDto;
+import com.Peter.dto.*;
 import com.Peter.entity.User;
 import com.github.pagehelper.PageInfo;
 
@@ -28,4 +25,8 @@ public interface UserService {
     List<UserInfoDto> queryUserInfoByParam(QueryUserInfoDto queryUserInfoDto);
 
     PageInfo<User> queryUserListByPage(QueryUserInfoDto queryUserInfoDto, Integer pageNum, Integer pageSize);
+
+    boolean sendVerificationCode(String email);
+
+    int updateUserPassword(ResetPasswordDto resetPasswordDto);
 }

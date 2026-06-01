@@ -1,7 +1,9 @@
 package com.Peter.controller;
 
+import cn.hutool.core.lang.Validator;
 import com.Peter.Param.BaseResult;
 import com.Peter.Param.PageResultWrapper;
+import com.Peter.Param.ResetPasswordParam;
 import com.Peter.Param.UserParam;
 import com.Peter.UserService;
 import com.Peter.common.ContractConfig;
@@ -136,6 +138,44 @@ public class UserController {
         }
 
     }
+    @PostMapping("/sendCode")
+    public BaseResult<Boolean> updateUserPassword(@RequestParam String email){
+          log.info("发送邮件-controller-入参：{}", email);
+          try {
+              Assert.isTrue(StringUtils.isNotBlank(email), "邮箱不能为空");
+              Assert.isTrue(userService.isEmailExists(email), "邮箱不存在");
+              boolean result=userService.sendVerificationCode(email);
+              if(result){
+                  log.info("发送邮件成功");
+                  return BaseResultUtils.generateSuccess(result);
+              }else {
+                  log.info("发送邮件失败");
+                  return BaseResultUtils.generateError("发送邮件失败");
+              }
+          }catch (Exception e){
+              log.error("发送邮件失败",e);
+              return BaseResultUtils.generateError("发送邮件失败");
+          }
+    }
+    @PostMapping("/update/user/password")
+    public BaseResult<Boolean> updateUserPassword(@RequestBody ResetPasswordParam resetPasswordParam){
+        try {
+            log.info("重置密码-controller-入参：{}", resetPasswordParam);
+            //参数校验
+            checkUpdateUserPasswordParam(resetPasswordParam);
+            //构建参数
+            ResetPasswordDto resetPasswordDto = new ResetPasswordDto();
+            resetPasswordDto.setEmail(resetPasswordParam.getEmail());
+            resetPasswordDto.setVerificationCode(resetPasswordParam.getVerificationCode());
+            resetPasswordDto.setNewPassword(resetPasswordParam.getNewPassword());
+            resetPasswordDto.setConfirmPassword(resetPasswordParam.getConfirmPassword());
+            int count =userService.updateUserPassword(resetPasswordDto);
+            return  BaseResultUtils.generateSuccess(count>0);
+        }catch (Exception e){
+            log.error("重置密码失败",e);
+            return BaseResultUtils.generateError("重置密码失败");
+        }
+    }
     @PostMapping("/delete")
     public BaseResult<Boolean> delete(@RequestBody UserParam userParam){
         log.info("删除用户-controller-入参：{}", userParam);
@@ -184,8 +224,17 @@ public class UserController {
         Assert.isTrue(userParam != null, "入参对象不能为空");
         Assert.isTrue(userParam.getId() != null, "用户ID不能为空");
         Assert.isTrue(StringUtils.isNotBlank(userParam.getUsername()), "用户名不能为空");
+        Assert.isTrue(StringUtils.isNotBlank(userParam.getPassword()), "密码不能为空");
     }
-
+   private void checkUpdateUserPasswordParam(ResetPasswordParam resetPasswordParam){
+       Assert.isTrue(resetPasswordParam != null, "入参对象不能为空");
+       Assert.isTrue(StringUtils.isNotBlank(resetPasswordParam.getEmail()), "邮箱不能为空");
+       Assert.isTrue(Validator.isEmail(resetPasswordParam.getEmail()), "邮箱格式不正确");
+       Assert.isTrue(userService.isEmailExists(resetPasswordParam.getEmail()), "邮箱不存在");
+       Assert.isTrue(StringUtils.isNotBlank(resetPasswordParam.getVerificationCode()), "验证码不能为空");
+       Assert.isTrue(StringUtils.isNotBlank(resetPasswordParam.getNewPassword()), "密码不能为空");
+       Assert.isTrue(StringUtils.isNotBlank(resetPasswordParam.getConfirmPassword()), "确认密码不能为空");
+   }
 
     private void checkLoginUserParam(UserParam userParam) {
         Assert.isTrue(userParam!=null,"入参对象不能为空");
@@ -198,10 +247,14 @@ public class UserController {
         Assert.isTrue(StringUtils.isNotBlank(userParam.getUsername()),"用户名不能为空");
         Assert.isTrue(userParam.getIsAgreeContract(),"请同意用户协议");
         //Assert.isTrue(StringUtils.isNotBlank(userParam.getPassword()),"密码不能为空");
-//        Assert.isTrue(StringUtils.isNotBlank(userParam.getEmail()),"邮箱不能为空");
-//        Assert.isTrue(StringUtils.isNotBlank(userParam.getPhone()),"手机号不能为空");
-//        Assert.isTrue(Validator.isEmail(userParam.getEmail()),"邮箱格式不正确");
-//        Assert.isTrue(Validator.isMobile(userParam.getPhone()),"手机号格式不正确");
+        Assert.isTrue(StringUtils.isNotBlank(userParam.getEmail()),"邮箱不能为空");
+  //      Assert.isTrue(StringUtils.isNotBlank(userParam.getPhone()),"手机号不能为空");
+        Assert.isTrue(Validator.isEmail(userParam.getEmail()),"邮箱格式不正确");
+        Assert.isTrue(!userService.isEmailExists(userParam.getEmail()),"邮箱已存在");
+        if(userParam.getPhone()!=null) {
+            Assert.isTrue(Validator.isMobile(userParam.getPhone()), "手机号格式不正确");
+            Assert.isTrue(!userService.isPhoneExists(userParam.getPhone()), "手机号已存在");
+        }
       Assert.isTrue(!userService.isUsernameExists(userParam.getUsername()), "用户名已存在");
     }
 
