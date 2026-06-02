@@ -23,10 +23,10 @@ spring:
   profiles:
     active: dev
   mail:
-    host: smtp.qq.com
+    host: smtp.gmail.com
     port: 587
-    username: your-email@qq.com
-    password: your-authorization-code
+    username: your@gmail.com
+    password: Gmail应用专用密码
     properties:
       mail:
         smtp:

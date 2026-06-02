@@ -310,7 +310,13 @@ public class UserServiceImpl implements UserService {
         if(!noLimit){
             userExample.setLimit(1000);
         }
-        criteria.andIdEqualTo(queryUserInfoDto.getId());
+        if(queryUserInfoDto.getId()!=null){
+            criteria.andIdEqualTo(queryUserInfoDto.getId());
+        }
+        if(StringUtils.isNotBlank(queryUserInfoDto.getUsername())){
+            criteria.andUsernameLike("%"+queryUserInfoDto.getUsername()+"%");
+        }
+        criteria.andIsDeleteEqualTo(0);
         return  userExample;
     }
 
