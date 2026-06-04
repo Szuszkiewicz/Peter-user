@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
         }
          //默认头像
         if(StringUtils.isBlank(user.getAvatar())){
-            String defaultAvatar="https://" + ip + " : "+ port+ "/user/file/default_avatar.png";
+            String defaultAvatar="http://" + ip + ":" + port + "/user/files/default_avatar.svg";
             user.setAvatar(defaultAvatar);
         }
     }

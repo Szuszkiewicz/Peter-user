@@ -8,10 +8,12 @@ import com.Peter.utils.BaseResultUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.xml.transform.Result;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 
@@ -21,6 +23,7 @@ import java.net.URLEncoder;
 public class FileController {
     //文件上传存储路径
     private static final  String filePath=System.getProperty("user.dir")+"/files/";
+    private static final String DEFAULT_AVATAR = "default_avatar.svg";
 
     @org.springframework.beans.factory.annotation.Value("${server.port:8489}")
     private String port;
@@ -61,7 +64,7 @@ public class FileController {
         if(env.equals("prod")){
             http="http://"+ip+":"+"api/user/files/";
         }else{
-            http="http://"+ip+":"+port+"/user/files";
+            http="http://"+ip+":"+port+"/user/files/";
         }
         return (Result) BaseResultUtils.success(http+flag+"-"+fileName);
     }
@@ -92,7 +95,7 @@ public class FileController {
     if(env.equals("prod")){
         http="http://"+ip+":"+"api/user/files/";
     }else{
-        http="http://"+ip+":"+port+"/user/files";
+        http="http://"+ip+":"+port+"/user/files/";
     }
 
     return Dict.create().set("errno",0).set("data",Dict.create().set("url",http+flag+"-"+fileName));
@@ -105,6 +108,10 @@ public class FileController {
     OutputStream os;
     try {
         if(StrUtil.isNotEmpty(flag)){
+            if (DEFAULT_AVATAR.equals(flag) && !FileUtil.exist(filePath + flag)) {
+                writeDefaultAvatar(response);
+                return;
+            }
             response.addHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode(flag,"UTF-8"));
             response.setContentType("application/octet-stream");
             byte[] bytes = FileUtil.readBytes(filePath+flag);
@@ -117,6 +124,12 @@ public class FileController {
         System.out.println("文件下载失败");
     }
 }
+
+    private void writeDefaultAvatar(HttpServletResponse response) throws IOException {
+        ClassPathResource defaultAvatar = new ClassPathResource("static/default_avatar.svg");
+        response.setContentType("image/svg+xml");
+        defaultAvatar.getInputStream().transferTo(response.getOutputStream());
+    }
 /**
  * 删除文件
  */

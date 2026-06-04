@@ -139,7 +139,7 @@ public class UserController {
 
     }
     @PostMapping("/sendCode")
-    public BaseResult<Boolean> updateUserPassword(@RequestParam String email){
+    public BaseResult<Boolean> sendVerificationCode(@RequestParam String email){
           log.info("发送邮件-controller-入参：{}", email);
           try {
               Assert.isTrue(StringUtils.isNotBlank(email), "邮箱不能为空");
@@ -158,7 +158,7 @@ public class UserController {
           }
     }
     @PostMapping("/update/user/password")
-    public BaseResult<Boolean> updateUserPassword(@RequestBody ResetPasswordParam resetPasswordParam){
+    public BaseResult<Boolean> sendVerificationCode(@RequestBody ResetPasswordParam resetPasswordParam){
         try {
             log.info("重置密码-controller-入参：{}", resetPasswordParam);
             //参数校验
