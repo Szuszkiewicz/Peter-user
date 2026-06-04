@@ -59,9 +59,9 @@ public class TokenUtils {
          HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
          String token=request.getHeader(Constants.TOKEN);
          if(ObjectUtil.isNotEmpty(token)) {
-             UserTokenInfoDto userTokenInfoDto = JSONObject.parseObject(JWT.decode(token).getAudience().get(0), UserTokenInfoDto.class);
-             String userRole=JWT.decode(token).getAudience().get(0);
-            String userId=userRole.split("-")[0];
+             UserTokenInfoDto userTokenInfoDto = JSONObject.parseObject(JWT.decode(token).getAudience().getFirst(), UserTokenInfoDto.class);
+             String userRole=JWT.decode(token).getAudience().getFirst();
+             String userId=userRole.split("-")[0];
              String role =userRole.split("-")[1];
              QueryUserInfoDto queryUserInfoDto=new QueryUserInfoDto();
              queryUserInfoDto.setId(Long.valueOf(userId));

@@ -1,8 +1,6 @@
 package com.Peter.Impl;
 
 import cn.hutool.core.lang.Validator;
-import cn.hutool.core.util.RandomUtil;
-import cn.hutool.extra.mail.JakartaMail;
 import com.Peter.common.Constants;
 import com.Peter.dto.*;
 import com.Peter.enums.RolesEnums;
@@ -21,7 +19,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -111,7 +108,10 @@ public class UserServiceImpl implements UserService {
                 BeanUtils.copyProperties(userfromDb, userInfoDto);
                 log.info("用户登录成功：{}", username);
                 //生成 token
-                String tokenData=userInfoDto.getId()+"-"+RolesEnums.getByCode(userInfoDto.getRole().intValue());
+                UserTokenInfoDto userTokenInfoDto = new UserTokenInfoDto();
+                BeanUtils.copyProperties(userInfoDto, userTokenInfoDto);
+                userTokenInfoDto.setPassword(null);
+                String tokenData= JSON.toJSONString(userTokenInfoDto);
                 String token= TokenUtils.createToken(tokenData,password);
                 userInfoDto.setToken(token);//token作为前端后续请求后端的入参
                 return userInfoDto;
